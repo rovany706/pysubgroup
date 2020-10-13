@@ -122,13 +122,17 @@ def similarity_sgs(sgd_results, data, color=True):
     return dist_df
 
 
-def similarity_dendrogram(result, data):
-    fig, _ = plt.subplots()
+def similarity_dendrogram(results, data):
+    result = results.results
+    fig = plt.figure(figsize=(10,10))
     dist_df = similarity_sgs(result, data, color=False)
     mat = 1 - dist_df.values
     dists = squareform(mat)
     linkage_matrix = linkage(dists, "single")
-    dendrogram(linkage_matrix, labels=dist_df.index)
+    dendrogram(linkage_matrix, labels=results.to_dataframe()['subgroup'].values)
+    plt.title('Similarity dendrogram for each subgroup')
+    plt.xticks(rotation=90)
+    plt.tight_layout()
     return fig
 
 def supportSetVisualization(result, in_order=True, drop_empty=True):
